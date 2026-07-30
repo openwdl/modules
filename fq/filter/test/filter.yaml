@@ -1,0 +1,87 @@
+filter:
+  - name: passthrough
+    inputs:
+      sources:
+        - [reads_R1.fastq]
+      output_names:
+        - [passthrough.fastq]
+    assertions:
+      exit_code: 0
+      stdout:
+        - "fq-filter start"
+        - "fq-filter end"
+      outputs:
+        filtered_fastqs:
+          - Length: 1
+          - First:
+              Name: passthrough.fastq
+  - name: names_paired
+    inputs:
+      sources:
+        - [reads_R1.fastq, reads_R2.fastq]
+      output_names:
+        - [named_R1.fastq, named_R2.fastq]
+      names:
+        - allowlist.txt
+    assertions:
+      exit_code: 0
+      stdout:
+        - "read 1 names"
+      outputs:
+        filtered_fastqs:
+          - Length: 2
+          - First:
+              Name: named_R1.fastq
+          - Last:
+              Name: named_R2.fastq
+  - name: sequence_pattern
+    inputs:
+      sources:
+        - [reads_R1.fastq]
+      output_names:
+        - [pattern.fastq]
+      sequence_pattern:
+        - "^TC"
+    assertions:
+      exit_code: 0
+      stdout:
+        - "sequence matches"
+      outputs:
+        filtered_fastqs:
+          - Length: 1
+          - First:
+              Name: pattern.fastq
+  - name: rejects_empty_sources
+    inputs:
+      sources:
+        - []
+      output_names:
+        - []
+    assertions:
+      should_fail: true
+      stderr:
+        - "`filter` requires at least one `source`"
+  - name: rejects_mismatched_arrays
+    inputs:
+      sources:
+        - [reads_R1.fastq, reads_R2.fastq]
+      output_names:
+        - [only_one.fastq]
+    assertions:
+      should_fail: true
+      stderr:
+        - "`sources` and `output_names` must have equal lengths"
+  - name: rejects_both_filter_modes
+    inputs:
+      sources:
+        - [reads_R1.fastq]
+      output_names:
+        - [invalid.fastq]
+      names:
+        - allowlist.txt
+      sequence_pattern:
+        - "^TC"
+    assertions:
+      should_fail: true
+      stderr:
+        - "`names` and `sequence_pattern` are mutually exclusive"

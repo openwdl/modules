@@ -1,0 +1,52 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: quality
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7.0.1
+
+      - name: Install Sprocket
+        uses: stjude-rust-labs/setup-sprocket@v1.0.1
+        with:
+          branch: feat/module-porcelain
+          github-token: ${{ github.token }}
+
+      - name: Verify portable skill
+        shell: bash
+        run: |
+          test -L .claude/skills/creating-wdl-modules
+          test "$(readlink .claude/skills/creating-wdl-modules)" = \
+            "../../.agents/skills/creating-wdl-modules"
+          test -f .claude/skills/creating-wdl-modules/SKILL.md
+
+      - name: Check WDL formatting
+        run: sprocket format check .
+
+      - name: Lint WDL
+        run: sprocket lint .
+
+      - name: Check WDL documentation
+        run: sprocket dev doc --check .
+
+      - name: Test modules
+        shell: bash
+        run: |
+          shopt -s nullglob
+          for manifest in ./*/module.json; do
+              module_dir="$(dirname "$manifest")"
+              sprocket dev module verify --manifest-path "$module_dir"
+              sprocket dev test "$module_dir"
+          done

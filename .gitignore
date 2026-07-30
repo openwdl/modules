@@ -14,6 +14,12 @@ miniwdl_run/
 _LAST/
 out/
 
+# Generated native-test runs
+*/test/runs/
+
+# Generated documentation
+/docs/
+
 # Python
 __pycache__/
 *.py[cod]

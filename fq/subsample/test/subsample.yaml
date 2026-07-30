@@ -1,0 +1,108 @@
+subsample:
+  - name: exact_paired
+    inputs:
+      r1_fastq:
+        - reads_R1.fastq
+      r2_fastq:
+        - reads_R2.fastq
+      record_count:
+        - 2
+      seed:
+        - 13
+      r1_output_name:
+        - subsampled_R1.fastq
+      r2_output_name:
+        - subsampled_R2.fastq
+    assertions:
+      exit_code: 0
+      stdout:
+        - "sampled 2/4 \\(50.0%\\) records"
+      outputs:
+        r1_subsampled_fastq:
+          - Name: subsampled_R1.fastq
+        r2_subsampled_fastq:
+          - Defined: true
+          - Name: subsampled_R2.fastq
+  - name: probability_single
+    inputs:
+      r1_fastq:
+        - reads_R1.fastq
+      probability:
+        - 0.5
+      seed:
+        - 13
+      r1_output_name:
+        - probability_R1.fastq
+    assertions:
+      exit_code: 0
+      stdout:
+        - "sampled [0-4]/4"
+      outputs:
+        r1_subsampled_fastq:
+          - Name: probability_R1.fastq
+        r2_subsampled_fastq:
+          - Defined: false
+  - name: rejects_missing_quantity
+    inputs:
+      r1_fastq:
+        - reads_R1.fastq
+      r1_output_name:
+        - invalid.fastq
+    assertions:
+      should_fail: true
+      stderr:
+        - "exactly one of `probability` or `record_count` is required"
+  - name: rejects_both_quantities
+    inputs:
+      r1_fastq:
+        - reads_R1.fastq
+      probability:
+        - 0.5
+      record_count:
+        - 2
+      r1_output_name:
+        - invalid.fastq
+    assertions:
+      should_fail: true
+      stderr:
+        - "exactly one of `probability` or `record_count` is required"
+  - name: rejects_missing_r2_output
+    inputs:
+      r1_fastq:
+        - reads_R1.fastq
+      r2_fastq:
+        - reads_R2.fastq
+      record_count:
+        - 2
+      r1_output_name:
+        - invalid_R1.fastq
+    assertions:
+      should_fail: true
+      stderr:
+        - "`r2_fastq` and `r2_output_name` must be provided together"
+  - name: rejects_missing_r2_source
+    inputs:
+      r1_fastq:
+        - reads_R1.fastq
+      record_count:
+        - 2
+      r1_output_name:
+        - invalid_R1.fastq
+      r2_output_name:
+        - invalid_R2.fastq
+    assertions:
+      should_fail: true
+      stderr:
+        - "`r2_fastq` and `r2_output_name` must be provided together"
+  - name: upstream_rejects_probability_boundary
+    inputs:
+      r1_fastq:
+        - reads_R1.fastq
+      probability:
+        - 0.0
+      r1_output_name:
+        - invalid.fastq
+    assertions:
+      should_fail: true
+      stderr:
+        - "invalid probability"

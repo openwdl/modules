@@ -1,0 +1,22 @@
+generate:
+  - name: seeded
+    inputs:
+      seed:
+        - 7
+      record_count:
+        - 4
+      read_length:
+        - 8
+      r1_output_name:
+        - generated_R1.fastq
+      r2_output_name:
+        - generated_R2.fastq
+    assertions:
+      exit_code: 0
+      stdout:
+        - "generated 4 records"
+      outputs:
+        r1_fastq:
+          - Name: generated_R1.fastq
+        r2_fastq:
+          - Name: generated_R2.fastq
