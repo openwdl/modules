@@ -26,12 +26,12 @@ jobs:
           github-token: ${{ github.token }}
 
       - name: Build documentation
-        run: sprocket dev doc --output _site --overwrite .
+        run: sprocket dev doc --output modules --overwrite .
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v5.0.0
         with:
-          path: _site
+          path: modules
 
   deploy:
     name: deploy

@@ -19,6 +19,7 @@ out/
 
 # Generated documentation
 /docs/
+/modules/
 
 # Python
 __pycache__/
