@@ -22,7 +22,7 @@ jobs:
       - name: Install Sprocket
         uses: stjude-rust-labs/setup-sprocket@v1.0.1
         with:
-          branch: feat/module-porcelain
+          branch: dev-doc-improvements
           github-token: ${{ github.token }}
 
       - name: Build documentation
