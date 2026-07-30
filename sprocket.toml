@@ -1,4 +1,4 @@
-#:schema https://raw.githubusercontent.com/stjude-rust-labs/sprocket/v0.28.0/jsonschemas/sprocket.toml.json
+#:schema https://raw.githubusercontent.com/stjude-rust-labs/sprocket/dev-doc-improvements/jsonschemas/sprocket.toml.json
 
 [format]
 indent = 4
@@ -22,6 +22,17 @@ parallelism = 4
 
 [doc]
 with_doc_comments = true
+
+[doc.seo]
+title = "OpenWDL Modules"
+keywords = [
+    "WDL",
+    "Workflow Description Language",
+    "OpenWDL",
+    "bioinformatics",
+    "workflow modules",
+    "portable workflows",
+]
 
 [common.wdl.feature_flags]
 wdl_1_3 = true
