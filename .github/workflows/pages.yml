@@ -1,0 +1,57 @@
+name: pages
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7.0.1
+
+      - name: Install Sprocket
+        uses: stjude-rust-labs/setup-sprocket@v1.0.1
+        with:
+          branch: feat/module-porcelain
+          github-token: ${{ github.token }}
+
+      - name: Build documentation
+        run: sprocket dev doc --output _site --overwrite .
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v5.0.0
+        with:
+          path: _site
+
+  deploy:
+    name: deploy
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+
+    steps:
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v6.0.0
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5.0.0

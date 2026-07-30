@@ -1,0 +1,80 @@
+lint:
+  - name: valid_single
+    inputs:
+      r1_fastq:
+        - reads_R1.fastq
+    assertions:
+      exit_code: 0
+      stdout:
+        - "read 4 records"
+  - name: valid_paired_all_options
+    inputs:
+      r1_fastq:
+        - reads_R1.fastq
+      r2_fastq:
+        - reads_R2.fastq
+      lint_mode:
+        - Log
+      single_read_validation_level:
+        - Medium
+      paired_read_validation_level:
+        - Medium
+      disabled_validators:
+        - [S006]
+      record_definition_separator:
+        - "/"
+    assertions:
+      exit_code: 0
+      stdout:
+        - "read 4 \\* 2 records"
+      outputs:
+        validation_report:
+          - Name: fq-lint.log
+  - name: disabled_validator
+    inputs:
+      r1_fastq:
+        - invalid.fastq
+      disabled_validators:
+        - [S002]
+      report_name:
+        - disabled-validator.log
+    assertions:
+      exit_code: 0
+      stdout:
+        - "read 1 records"
+      outputs:
+        validation_report:
+          - Name: disabled-validator.log
+  - name: invalid_fastq
+    inputs:
+      r1_fastq:
+        - invalid.fastq
+    assertions:
+      should_fail: true
+      stderr:
+        - "\\[S002\\]"
+  - name: valid_low_levels
+    inputs:
+      r1_fastq:
+        - reads_R1.fastq
+      single_read_validation_level:
+        - Low
+      paired_read_validation_level:
+        - Low
+    assertions:
+      exit_code: 0
+      stdout:
+        - "read 4 records"
+      outputs:
+        validation_report:
+          - Name: fq-lint.log
+  - name: invalid_log_mode
+    inputs:
+      r1_fastq:
+        - invalid.fastq
+      lint_mode:
+        - Log
+    assertions:
+      should_fail: true
+      stdout:
+        - "\\[S002\\]"

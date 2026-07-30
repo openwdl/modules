@@ -1,0 +1,57 @@
+## Wraps `__tool__` for __tool_purpose__.
+## Exports the `__operation__` task.
+version 1.4
+
+## __task_description__.
+task __operation__ {
+    input {
+        ## __input_description__.
+        env File __input_variable__
+
+        ## __output_name_description__.
+        env String output_name = "__output_name__"
+
+        ## Minimum CPU cores.
+        Int cpu = 1
+
+        ## Minimum memory with units.
+        String memory = "2 GiB"
+
+        ## Minimum disk space in GiB.
+        Int disk_gib = 10
+
+        ## Digest-pinned official upstream image or BioContainers fallback.
+        String container = "__image_tag__@sha256:__digest__"
+
+        ## Additional trusted arguments absent from the pinned CLI.
+        Array[String] extra_args = []
+    }
+
+    # File preserving trusted extra-argument boundaries.
+    env File extra_args_file = write_lines(extra_args)
+
+    command <<<
+        # shellcheck disable=SC2154
+        set -euo pipefail
+
+        extra_args=()
+        mapfile -t extra_args < "$extra_args_file"
+
+        __tool__ __operation__ \
+            "${extra_args[@]}" \
+            "$__input_variable__" \
+            > "$output_name"
+    >>>
+
+    output {
+        ## __output_description__.
+        File __output_variable__ = output_name
+    }
+
+    requirements {
+        container: container
+        cpu: cpu
+        memory: memory
+        disks: disk_gib
+    }
+}

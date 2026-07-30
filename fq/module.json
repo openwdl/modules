@@ -1,0 +1,17 @@
+{
+  "$schema": "https://raw.githubusercontent.com/openwdl/wdl/8199dd7e3f17322e827225d6e6bc886dac139207/modules/schemas/module.schema.json",
+  "name": "fq",
+  "license": "MIT OR Apache-2.0",
+  "description": "WDL tasks for `fq`",
+  "repository": "https://github.com/stjude-rust-labs/modules",
+  "entrypoint": "fq.wdl",
+  "tools": [
+    {
+      "name": "fq",
+      "version": "0.12.0",
+      "license": "MIT",
+      "url": "https://github.com/stjude-rust-labs/fq"
+    }
+  ],
+  "dependencies": {}
+}
