@@ -1,5 +1,8 @@
 <div style="align: center">
-  <img src=".github/assets/readme-header.svg" width="100%">
+  <img
+    src="https://raw.githubusercontent.com/openwdl/modules/main/.github/assets/readme-header.svg"
+    width="100%"
+  >
 </div>
 
 <br />
@@ -13,8 +16,10 @@ stable, versioned starting point.
 
 # Licensing
 
-This repository is dual-licensed under [MIT](./LICENSE-MIT) or
-[Apache-2.0](./LICENSE-APACHE) at your option.
+This repository is dual-licensed under
+[MIT](https://github.com/openwdl/modules/blob/main/LICENSE-MIT) or
+[Apache-2.0](https://github.com/openwdl/modules/blob/main/LICENSE-APACHE) at your
+option.
 
 Every module in this repository contains only workflow logic—that is, WDL code
 that describes *how* to run tools, not the tools themselves. The tools that
@@ -125,4 +130,5 @@ We have included a pull request template that outlines these requirements.
 
 # Contributing
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md).
+See
+[CONTRIBUTING.md](https://github.com/openwdl/modules/blob/main/CONTRIBUTING.md).
